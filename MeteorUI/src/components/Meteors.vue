@@ -85,19 +85,31 @@ const headers = [
   { title: "Total Mass", align: "start", key: "mass" },
 ];
 
+function showErrorMsg(error) {
+  var errMsg = "";
+  var errors = error.response.data.errors;
+  var errKeys = Object.keys(errors);
+  errKeys.forEach((errKey) => {
+    errMsg += errors[errKey];
+  });
+
+  loading.value = false;
+  alert(errMsg);
+}
+
 function loadItems({ page, itemsPerPage, sortBy }) {
   meteorsFilter.page = page;
   meteorsFilter.itemsPerPage = itemsPerPage;
-  if(sortBy.length > 0){
+  if (sortBy.length > 0) {
     meteorsFilter.sortField = sortBy[0].key;
     meteorsFilter.sortAsc = sortBy[0].order == "asc" ? true : false;
   }
-  
+
   onGetMeteors();
 }
 
 function onGetMeteors() {
-  debugger
+  debugger;
   loading.value = true;
   Promise.all([
     axios.get("https://localhost:7182/meteor/meteors", {
@@ -106,25 +118,30 @@ function onGetMeteors() {
     axios.get("https://localhost:7182/meteor/meteorsTotal", {
       params: meteorsFilter,
     }),
-  ]).then(([meteorsRes, meteorsTotalRes]) => {
-    meteors.value = meteorsRes.data;
-    meteorsTotal.count = meteorsTotalRes.data.count;
-    meteorsTotal.mass = meteorsTotalRes.data.mass;
-    meteorsTotal.rowsCount = meteorsTotalRes.data.rowsCount;
-    loading.value = false;
-  });
+  ])
+    .then(([meteorsRes, meteorsTotalRes]) => {
+      meteors.value = meteorsRes.data;
+      meteorsTotal.count = meteorsTotalRes.data.count;
+      meteorsTotal.mass = meteorsTotalRes.data.mass;
+      meteorsTotal.rowsCount = meteorsTotalRes.data.rowsCount;
+      loading.value = false;
+    })
+    .catch(showErrorMsg);
 }
 
 onMounted(() => {
-  axios.get("https://localhost:7182/meteor/filter").then(function (response) {
-    meteorsFilterData.recclasses = response.data.recclasses;
-    meteorsFilterData.recclasses.unshift(meteorsFilter.recclass);
+  axios
+    .get("https://localhost:7182/meteor/filter")
+    .then(function (response) {
+      meteorsFilterData.recclasses = response.data.recclasses;
+      meteorsFilterData.recclasses.unshift(meteorsFilter.recclass);
 
-    var minYear = response.data.minYear;
-    var currentYear = new Date().getFullYear();
-    while (minYear <= currentYear) {
-      meteorsFilterData.years.push(minYear++);
-    }
-  });
+      var minYear = response.data.minYear;
+      var currentYear = new Date().getFullYear();
+      while (minYear <= currentYear) {
+        meteorsFilterData.years.push(minYear++);
+      }
+    })
+    .catch(showErrorMsg);
 });
 </script>
