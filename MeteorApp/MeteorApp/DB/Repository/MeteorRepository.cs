@@ -16,7 +16,7 @@ namespace MeteorApp.DB.Repository
             _context = context;
             _predicate = predicate;
         }
-        public async Task<FilterMeteorsView> GetFilterDataAsync()
+        public async Task<FilterMeteorsView> GetFilterAsync()
         {
             var minYear = await _context.Meteors.Select(meteor => meteor.Year.Year).MinAsync();
             var recclasses = await _context.Meteors.GroupBy(meteor => meteor.Recclass).Select(group => group.Key).ToListAsync();
@@ -29,20 +29,20 @@ namespace MeteorApp.DB.Repository
 
             return filterMeteorsView;
         }
-        public async Task<MeteorsTotalDataView> GetMeteorsTotalDataAsync(FilterMeteorsDTO filter)
+        public async Task<MeteorsTotalView> GetMeteorsTotalAsync(FilterMeteorsDTO filter)
         {
             var meteorPredicate = _predicate.Build(filter);
 
             var query = await _context.Meteors.Where(meteorPredicate).ToListAsync();
 
-            var meteorsTotalData = new MeteorsTotalDataView()
+            var meteorsTotal = new MeteorsTotalView()
             {
                 Count = query.Count(),
                 RowsCount = query.GroupBy(meteor => meteor.Year.Year).Count(),
                 Mass = query.Select(meteor => meteor.Mass).Sum()
             };
 
-            return meteorsTotalData;
+            return meteorsTotal;
         }
         public async Task<IEnumerable<MeteorView>> GetMeteorsAsync(FilterMeteorsPaginationDTO filter)
         {

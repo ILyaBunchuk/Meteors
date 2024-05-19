@@ -11,7 +11,7 @@ builder.Services.AddCors();
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IDataRecipientService, DataRecipientService>();
+builder.Services.AddScoped<IMeteorsRecipientService, MeteorsRecipientService>();
 builder.Services.AddScoped<IMeteorService, MeteorService>();
 builder.Services.AddScoped<IRepository, MeteorRepository>();
 builder.Services.AddScoped<MeteorContext>();
@@ -22,8 +22,8 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddMemoryCache();
 
 await builder.Services.BuildServiceProvider()
-    .GetService<IDataRecipientService>()
-    .GetDataAndSaveInDBAsync();
+    .GetService<IMeteorsRecipientService>()
+    .GetMeteorsAndSaveInDBAsync();
 
 var app = builder.Build();
 

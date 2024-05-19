@@ -5,17 +5,17 @@ using MeteorApp.Interfaces;
 
 namespace MeteorApp.Services
 {
-    public class DataRecipientService : IDataRecipientService
+    public class MeteorsRecipientService : IMeteorsRecipientService
     {
         private readonly IRepository _repository;
         private readonly IMapper _mapper;
 
-        public DataRecipientService(IMapper mapper, IRepository repository)
+        public MeteorsRecipientService(IMapper mapper, IRepository repository)
         {
             _mapper = mapper;
             _repository = repository;
         }
-        private async Task<string> GetDataAsync()
+        private async Task<string> GetMeteorsAsync()
         {
             using var httpClient = new HttpClient();
             using HttpResponseMessage response = await httpClient.GetAsync("https://data.nasa.gov/resource/y77d-th95.json");
@@ -28,11 +28,11 @@ namespace MeteorApp.Services
             return jsonResponse;
         }
 
-        public async Task GetDataAndSaveInDBAsync()
+        public async Task GetMeteorsAndSaveInDBAsync()
         {
             try
             {
-                string jsonResponse = await GetDataAsync();
+                string jsonResponse = await GetMeteorsAsync();
 
                 if (jsonResponse == null) throw new Exception("Got empty data from resource");
 

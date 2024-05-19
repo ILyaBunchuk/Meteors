@@ -14,39 +14,39 @@ namespace MeteorApp.Services
             _repository = repository;
             _memoryCache = memoryCache;
         }
-        public async Task<FilterMeteorsView> GetFilterDataAsync()
+        public async Task<FilterMeteorsView> GetFilterAsync()
         {
-            FilterMeteorsView meteorFilterData;
-            string cacheKey = "MeteorFilterData";
+            FilterMeteorsView meteorFilter;
+            string cacheKey = "MeteorFilter";
 
-            if (!_memoryCache.TryGetValue(cacheKey, out meteorFilterData))
+            if (!_memoryCache.TryGetValue(cacheKey, out meteorFilter))
             {
-                meteorFilterData = await _repository.GetFilterDataAsync();
+                meteorFilter = await _repository.GetFilterAsync();
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
 
-                _memoryCache.Set(cacheKey, meteorFilterData, cacheOptions);
+                _memoryCache.Set(cacheKey, meteorFilter, cacheOptions);
             }
 
-            return meteorFilterData;
+            return meteorFilter;
         }
-        public async Task<MeteorsTotalDataView> GetMeteorsTotalDataAsync(FilterMeteorsDTO filter)
+        public async Task<MeteorsTotalView> GetMeteorsTotalAsync(FilterMeteorsDTO filter)
         {
-            MeteorsTotalDataView meteorsTotalData;
-            string cacheKey =  JsonConvert.SerializeObject(filter) + "TotalData";
+            MeteorsTotalView meteorsTotal;
+            string cacheKey =  JsonConvert.SerializeObject(filter) + "Total";
 
-            if (!_memoryCache.TryGetValue(cacheKey, out meteorsTotalData))
+            if (!_memoryCache.TryGetValue(cacheKey, out meteorsTotal))
             {
-                meteorsTotalData = await _repository.GetMeteorsTotalDataAsync(filter);
+                meteorsTotal = await _repository.GetMeteorsTotalAsync(filter);
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
 
-                _memoryCache.Set(cacheKey, meteorsTotalData, cacheOptions);
+                _memoryCache.Set(cacheKey, meteorsTotal, cacheOptions);
             }
 
-            return meteorsTotalData;
+            return meteorsTotal;
         }
         public async Task<IEnumerable<MeteorView>> GetMeteorsAsync(FilterMeteorsPaginationDTO filter)
         {

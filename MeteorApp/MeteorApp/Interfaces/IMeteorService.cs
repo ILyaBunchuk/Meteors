@@ -4,8 +4,8 @@ namespace MeteorApp.Interfaces
 {
     public interface IMeteorService
     {
-        Task<FilterMeteorsView> GetFilterDataAsync();
+        Task<FilterMeteorsView> GetFilterAsync();
         Task<IEnumerable<MeteorView>> GetMeteorsAsync(FilterMeteorsPaginationDTO filter);
-        Task<MeteorsTotalDataView> GetMeteorsTotalDataAsync(FilterMeteorsDTO filter);
+        Task<MeteorsTotalView> GetMeteorsTotalAsync(FilterMeteorsDTO filter);
     }
 }

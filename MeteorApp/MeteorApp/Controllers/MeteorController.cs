@@ -17,16 +17,16 @@ namespace MeteorApp.Controllers
 
         [HttpGet]
         [Route("filter")]
-        public async Task<FilterMeteorsView> GetFilterDataAsync()
+        public async Task<FilterMeteorsView> GetFilterAsync()
         {
-            return await _meteorService.GetFilterDataAsync();
+            return await _meteorService.GetFilterAsync();
         }
 
         [HttpGet]
         [Route("meteorsTotal")]
-        public async Task<MeteorsTotalDataView> GetMeteorsTotalData([FromQuery]FilterMeteorsDTO filterMeteorsDTO)
+        public async Task<MeteorsTotalView> GetMeteorsTotal([FromQuery]FilterMeteorsDTO filterMeteorsDTO)
         {
-            return await _meteorService.GetMeteorsTotalDataAsync(filterMeteorsDTO);
+            return await _meteorService.GetMeteorsTotalAsync(filterMeteorsDTO);
         }
 
         [HttpGet]
