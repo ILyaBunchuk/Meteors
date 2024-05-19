@@ -1,0 +1,6 @@
+@MeteorApp_HostAddress = https://localhost:7182
+
+GET {{MeteorApp_HostAddress}}/meteor/meteors
+Accept: application/json
+
+###
